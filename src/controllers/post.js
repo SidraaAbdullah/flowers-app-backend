@@ -1,9 +1,8 @@
 import joi from "joi";
 import cloudinary from "cloudinary";
-
 import { Post } from "../models";
 import { CustomErrorHandler } from "../services";
-import { CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } from "../config";
+import { CLOUDINARY_NAME, CLOUDINARY_KEY, CLOUDINARY_SECRET } from "../../config";
 
 cloudinary.config({
   cloud_name: CLOUDINARY_NAME,

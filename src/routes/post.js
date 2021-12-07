@@ -1,6 +1,5 @@
 import express from "express";
 import formidable from "express-formidable";
-
 import { auth, canEditAndDeletePost } from "../middlewares";
 import {
   createPost,

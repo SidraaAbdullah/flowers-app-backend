@@ -1,13 +1,11 @@
 import joi from "joi";
 import { nanoid } from "nanoid";
-
 import { User } from "../models";
-import { hashPassword, comparePassword } from "../helpers";
+import { hashPassword, comparePassword } from "../utils";
 import { CustomErrorHandler, JwtService } from "../services";
 
 export const register = async (req, res, next) => {
   const { name, email, password, secret } = req.body;
-
   const registerSchema = joi.object({
     name: joi.string().min(3).max(30).required(),
     email: joi.string().email().required(),

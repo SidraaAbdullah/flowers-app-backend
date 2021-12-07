@@ -4,7 +4,7 @@ import cors from "cors";
 import morgan from "morgan";
 
 import { errorHandler } from "./middlewares";
-import { APP_PORT, DB_URL } from "./config";
+import { APP_PORT, DB_URL } from "../config";
 import { authRoutes, postRoutes } from "./routes";
 
 const app = express();

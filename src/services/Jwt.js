@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
-
-import { JWT_SECRET } from "../config";
+import { JWT_SECRET } from "../../config";
 
 class JwtService {
   static sign(payload, expiry = "1h", secret = JWT_SECRET) {
