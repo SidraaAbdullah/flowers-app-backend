@@ -1,19 +1,16 @@
-import joi from "joi";
+import joi from 'joi';
 // import { nanoid } from "nanoid";
-import { User } from "../models";
-import { hashPassword, comparePassword } from "../utils";
-import { CustomErrorHandler, JwtService } from "../services";
+import { User } from '../models';
+import { hashPassword, comparePassword } from '../utils';
+import { CustomErrorHandler, JwtService } from '../services';
 
 export const register = async (req, res, next) => {
   const { phone_number, email, password, cpassword } = req.body;
   const registerSchema = joi.object({
-    phone_number: joi.number().required(),
+    phone_number: joi.string().required(),
     email: joi.string().email().required(),
-    password: joi
-      .string()
-      .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
-      .required(),
-    cpassword: joi.ref("password"),
+    password: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+    cpassword: joi.ref('password'),
   });
 
   const { error } = registerSchema.validate(req.body);
@@ -24,9 +21,7 @@ export const register = async (req, res, next) => {
   try {
     const exist = await User.exists({ email: email });
     if (exist) {
-      return next(
-        CustomErrorHandler.alreadyExist("This email is already taken.")
-      );
+      return next(CustomErrorHandler.alreadyExist('This email is already taken.'));
     }
   } catch (err) {
     return next(err);
@@ -38,7 +33,7 @@ export const register = async (req, res, next) => {
     email,
     password: hashedPassword,
     phone_number,
-    cpassword
+    cpassword,
   });
   let result;
   let access_token;
@@ -50,7 +45,7 @@ export const register = async (req, res, next) => {
   }
 
   res.json({
-    message: "User successfully registered",
+    message: 'User successfully registered',
     data: {
       access_token,
       id: result._id,
@@ -64,10 +59,7 @@ export const login = async (req, res, next) => {
 
   const loginSchema = joi.object({
     email: joi.string().email().required(),
-    password: joi
-      .string()
-      .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
-      .required(),
+    password: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
   });
   const { error } = loginSchema.validate(req.body);
   if (error) {
@@ -96,7 +88,7 @@ export const login = async (req, res, next) => {
     const { _id, name, username, following, followers } = user;
 
     res.json({
-      message: "Login success",
+      message: 'Login success',
       data: {
         _id,
         name,
@@ -115,15 +107,13 @@ export const login = async (req, res, next) => {
 export const currentUser = async (req, res, next) => {
   const { _id } = req.user;
   try {
-    const user = await User.findOne({ _id: _id }).select(
-      "-password -secret -updatedAt -__v"
-    );
+    const user = await User.findOne({ _id: _id }).select('-password -secret -updatedAt -__v');
     if (!user) {
       return next(CustomErrorHandler.notFound());
     }
 
     res.json({
-      messgae: "User successfully found",
+      messgae: 'User successfully found',
       data: user,
     });
   } catch (error) {
@@ -136,10 +126,7 @@ export const forgotPassword = async (req, res, next) => {
 
   const forgotPasswordSchema = joi.object({
     email: joi.string().email().required(),
-    newPassword: joi
-      .string()
-      .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
-      .required(),
+    newPassword: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
     secret: joi.string().required(),
   });
   const { error } = forgotPasswordSchema.validate(req.body);
@@ -158,7 +145,7 @@ export const forgotPassword = async (req, res, next) => {
     await User.findByIdAndUpdate(user._id, { password: hashedPassword });
 
     res.json({
-      message: "Password successfully changed",
+      message: 'Password successfully changed',
     });
   } catch (error) {
     return next(error);
@@ -174,11 +161,7 @@ export const profileUpdate = async (req, res, next) => {
     username: joi.string().required(),
     about: joi.string().required(),
     secret: joi.string().required(),
-    password: joi
-      .string()
-      .min(6)
-      .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
-      .required(),
+    password: joi.string().min(6).pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
   });
 
   const { error } = updateSchema.validate(req.body);
@@ -192,19 +175,19 @@ export const profileUpdate = async (req, res, next) => {
     const user = await User.findByIdAndUpdate(
       _id,
       { ...req.body, password: hashedPassword },
-      { new: true }
+      { new: true },
     );
 
     user.password = undefined;
     user.secret = undefined;
 
     res.json({
-      message: "User successfully updated",
+      message: 'User successfully updated',
       data: user,
     });
   } catch (error) {
     if (error.code === 11000) {
-      return next(CustomErrorHandler.alreadyExist("Duplicate username"));
+      return next(CustomErrorHandler.alreadyExist('Duplicate username'));
     } else {
       return next(error);
     }
