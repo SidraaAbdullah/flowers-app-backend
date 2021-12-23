@@ -7,7 +7,7 @@ import { CustomErrorHandler, JwtService } from "../services";
 export const register = async (req, res, next) => {
   const { phone_number, email, password, cpassword } = req.body;
   const registerSchema = joi.object({
-    phone_number: joi.string().email().required(),
+    phone_number: joi.number().required(),
     email: joi.string().email().required(),
     password: joi
       .string()
