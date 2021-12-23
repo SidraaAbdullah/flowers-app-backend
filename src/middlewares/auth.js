@@ -9,10 +9,9 @@ export const auth = (req, res, next) => {
 
   const token = authHeader.split(" ")[1];
   try {
-    const { _id, secret } = JwtService.verify(token);
+    const { _id } = JwtService.verify(token);
     req.user = {
       _id,
-      secret,
     };
     next();
   } catch (error) {

@@ -5,8 +5,9 @@ import { hashPassword, comparePassword } from '../utils';
 import { CustomErrorHandler, JwtService } from '../services';
 
 export const register = async (req, res, next) => {
-  const { phone_number, email, password, cpassword } = req.body;
+  const {name, phone_number, email, password} = req.body;
   const registerSchema = joi.object({
+    name: joi.string().required(),
     phone_number: joi.string().required(),
     email: joi.string().email().required(),
     password: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
@@ -30,10 +31,10 @@ export const register = async (req, res, next) => {
   const hashedPassword = await hashPassword(password);
 
   const user = new User({
+    name,
     email,
     password: hashedPassword,
     phone_number,
-    cpassword,
   });
   let result;
   let access_token;
@@ -50,6 +51,7 @@ export const register = async (req, res, next) => {
       access_token,
       id: result._id,
       email,
+      name
     },
   });
 };
@@ -76,16 +78,11 @@ export const login = async (req, res, next) => {
     if (!match) {
       return next(CustomErrorHandler.wrongCredentials());
     }
+    const { _id, name } = user;
 
     const access_token = JwtService.sign({
-      _id: user._id,
-      secret: user.secret,
+      _id,
     });
-
-    user.password = undefined;
-    user.secret = undefined;
-
-    const { _id, name, username, following, followers } = user;
 
     res.json({
       message: 'Login success',
@@ -93,9 +90,6 @@ export const login = async (req, res, next) => {
         _id,
         name,
         email,
-        username,
-        following,
-        followers,
         access_token,
       },
     });
