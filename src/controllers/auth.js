@@ -1,20 +1,19 @@
 import joi from "joi";
-import { nanoid } from "nanoid";
+// import { nanoid } from "nanoid";
 import { User } from "../models";
 import { hashPassword, comparePassword } from "../utils";
 import { CustomErrorHandler, JwtService } from "../services";
 
 export const register = async (req, res, next) => {
-  const { name, email, password, secret } = req.body;
+  const { phone_number, email, password, cpassword } = req.body;
   const registerSchema = joi.object({
-    name: joi.string().min(3).max(30).required(),
+    phone_number: joi.string().email().required(),
     email: joi.string().email().required(),
     password: joi
       .string()
       .pattern(new RegExp("^[a-zA-Z0-9]{3,30}$"))
       .required(),
-    repeat_password: joi.ref("password"),
-    secret: joi.string().required(),
+    cpassword: joi.ref("password"),
   });
 
   const { error } = registerSchema.validate(req.body);
@@ -34,20 +33,18 @@ export const register = async (req, res, next) => {
   }
 
   const hashedPassword = await hashPassword(password);
-  const username = nanoid(6);
 
   const user = new User({
-    name,
     email,
     password: hashedPassword,
-    username,
-    secret,
+    phone_number,
+    cpassword
   });
   let result;
   let access_token;
   try {
     result = await user.save();
-    access_token = JwtService.sign({ _id: result._id, secret: secret });
+    access_token = JwtService.sign({ _id: result._id });
   } catch (error) {
     return next(error);
   }
@@ -57,10 +54,7 @@ export const register = async (req, res, next) => {
     data: {
       access_token,
       id: result._id,
-      name,
       email,
-      secret,
-      username,
     },
   });
 };
