@@ -1,9 +1,8 @@
-import { number } from 'joi';
 import mongoose, { Schema } from 'mongoose';
 
 const userSchema = new Schema({
   phone_number: {
-    type: number,
+    type: String,
     trim: true,
     required: true,
   },
