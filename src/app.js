@@ -5,7 +5,7 @@ import morgan from 'morgan';
 
 import { errorHandler } from './middlewares';
 import { APP_PORT, DB_URL } from '../config';
-import { authRoutes, postRoutes, productRoutes } from './routes';
+import { authRoutes, postRoutes, categoryRoutes, productRoutes } from './routes';
 
 const app = express();
 
@@ -25,8 +25,9 @@ app.use(cors());
 
 //routes middleware
 app.use('/api', authRoutes);
-app.use('/api', postRoutes);
+// app.use('/api', postRoutes);
 app.use('/api', productRoutes);
+app.use('/api', categoryRoutes);
 
 app.use(errorHandler);
 app.listen(APP_PORT, () => console.log(`Listening on port ${APP_PORT}.`));
