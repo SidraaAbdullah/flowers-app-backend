@@ -1,17 +1,9 @@
-import joi from 'joi';
-// import { nanoid } from "nanoid";
 import { Admin } from '../models';
 import { hashPassword, comparePassword } from '../utils';
 import { CustomErrorHandler, JwtService } from '../services';
-
+import { registerSchema, loginSchema } from '../validations/admin-auth';
 export const AdminRegister = async (req, res, next) => {
-  const {name, email, password} = req.body;
-  const registerSchema = joi.object({
-    name: joi.string().required(),
-    email: joi.string().email().required(),
-    password: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
-    cpassword: joi.ref('password'),
-  });
+  const { name, email, password } = req.body;
 
   const { error } = registerSchema.validate(req.body);
   if (error) {
@@ -44,12 +36,12 @@ export const AdminRegister = async (req, res, next) => {
   }
 
   res.json({
-    message: 'User successfully registered',
+    message: 'Admin successfully registered',
     data: {
       access_token,
       id: result._id,
       email,
-      name
+      name,
     },
   });
 };
@@ -57,10 +49,6 @@ export const AdminRegister = async (req, res, next) => {
 export const AdminLogin = async (req, res, next) => {
   const { email, password } = req.body;
 
-  const loginSchema = joi.object({
-    email: joi.string().email().required(),
-    password: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
-  });
   const { error } = loginSchema.validate(req.body);
   if (error) {
     return next(error);
