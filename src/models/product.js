@@ -9,6 +9,12 @@ const product = new Schema({
   image: {
     type: String,
   },
+  status: {
+    type: String,
+  },
+  description: {
+    type: String,
+  },
   created_by: {
     type: Schema.ObjectId,
     required: true,
@@ -16,6 +22,7 @@ const product = new Schema({
   },
   category_id: {
     type: Schema.ObjectId,
+    ref: 'Category',
   },
 });
 product.set('timestamps', true);
