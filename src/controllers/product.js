@@ -19,7 +19,11 @@ export const createProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    const products = await product.find(req.query).populate('category_id');
+    let query = {};
+    if (req.query.category_id) {
+      query.category_id = req.query.category_id;
+    }
+    const products = await product.find(query).populate('category_id');
     return res.json({
       message: 'Gathered all flowers!',
       data: products,

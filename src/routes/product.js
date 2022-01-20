@@ -8,6 +8,6 @@ const router = express.Router();
 
 router.post('/product', [validate(createProductValidate), auth], createProduct);
 router.get('/product', [auth], getProducts);
-router.delete('/product', [validate(deleteProductValidate)], deleteProducts);
+router.delete('/product', [auth, validate(deleteProductValidate)], deleteProducts);
 
 export default router;
