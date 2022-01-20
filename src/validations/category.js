@@ -4,6 +4,7 @@ export const createCategoryValidate = {
   name: joi.string().required(),
   created_by: joi.string().required(),
   image: joi.string().optional(),
+  description: joi.string().optional().allow(null),
 };
 
 export const deleteCategoryValidate = {

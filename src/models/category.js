@@ -14,6 +14,9 @@ const category = new Schema({
     required: true,
     ref: 'user',
   },
+  description:{
+    type: String,
+  }
 });
 category.set('timestamps', true);
 export default mongoose.model('Category', category, 'categories');
