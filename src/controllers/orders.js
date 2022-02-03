@@ -1,4 +1,5 @@
 import orders from '../models/orders';
+import user from '../models/user';
 
 export const createOrders = async (req, res) => {
   try {
@@ -18,9 +19,10 @@ export const createOrders = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   try {
-    const orders = await orders.find(req.query);
+    const data = await orders.find({ user_id: req.user._id }).populate('products.product_id');
     return res.status(200).json({
-      data: orders,
+      data,
+      user_id: req.user._id
     });
   } catch (error) {
     console.log({ error });
