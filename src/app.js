@@ -5,7 +5,15 @@ import morgan from 'morgan';
 
 import { errorHandler } from './middlewares';
 import { APP_PORT, DB_URL } from '../config';
-import { authRoutes, postRoutes, categoryRoutes, productRoutes, adminRoutes } from './routes';
+import {
+  authRoutes,
+  postRoutes,
+  categoryRoutes,
+  productRoutes,
+  adminRoutes,
+  userRoutes,
+  orderRoutes,
+} from './routes';
 
 const app = express();
 
@@ -29,6 +37,8 @@ app.use('/api', authRoutes);
 app.use('/api', productRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', adminRoutes);
+app.use('/api', userRoutes);
+app.use('/api', orderRoutes);
 
 app.use(errorHandler);
 app.listen(APP_PORT, () => console.log(`Listening on port ${APP_PORT}.`));
