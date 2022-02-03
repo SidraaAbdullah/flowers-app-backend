@@ -5,6 +5,7 @@ const products = new schema({
   product_id: {
     type: Schema.ObjectId,
     ref: 'Product',
+    required: true,
   },
   price: {
     type: String,
@@ -24,9 +25,14 @@ const order = new Schema({
   deliveryAddress: {
     type: Schema.ObjectId,
     ref: 'delivery-address',
+    required: true,
   },
   subTotal: {
     type: String,
+  },
+  status: {
+    type: String,
+    default: 'inProgress',
   },
 });
 order.set('timestamps', true);

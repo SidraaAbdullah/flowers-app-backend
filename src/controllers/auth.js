@@ -4,6 +4,7 @@ import { User } from '../models';
 import { hashPassword, comparePassword } from '../utils';
 import { CustomErrorHandler, JwtService } from '../services';
 import { registerSchema, loginSchema } from '../validations/user-auth';
+import Delivery from '../models/delivery-address';
 
 export const register = async (req, res, next) => {
   const { name, phone_number, email, password } = req.body;
@@ -69,11 +70,10 @@ export const login = async (req, res, next) => {
       return next(CustomErrorHandler.wrongCredentials());
     }
     const { _id, name } = user;
-
     const access_token = JwtService.sign({
       _id,
     });
-
+    const primaryDeliveryAddress = await Delivery.findOne({ user_id: _id, primary: true });
     res.json({
       message: 'Login success',
       data: {
@@ -81,6 +81,7 @@ export const login = async (req, res, next) => {
         name,
         email,
         access_token,
+        primaryDeliveryAddress
       },
     });
   } catch (error) {
