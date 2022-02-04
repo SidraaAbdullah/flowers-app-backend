@@ -4,6 +4,7 @@ import { User } from '../models';
 import { hashPassword, comparePassword } from '../utils';
 import { CustomErrorHandler, JwtService } from '../services';
 import { registerSchema, loginSchema } from '../validations/user-auth';
+import Delivery from '../models/delivery-address';
 
 export const register = async (req, res, next) => {
   const { name, phone_number, email, password } = req.body;
@@ -69,11 +70,10 @@ export const login = async (req, res, next) => {
       return next(CustomErrorHandler.wrongCredentials());
     }
     const { _id, name } = user;
-
     const access_token = JwtService.sign({
       _id,
     });
-
+    const primaryDeliveryAddress = await Delivery.findOne({ user_id: _id, primary: true });
     res.json({
       message: 'Login success',
       data: {
@@ -81,6 +81,7 @@ export const login = async (req, res, next) => {
         name,
         email,
         access_token,
+        primaryDeliveryAddress,
       },
     });
   } catch (error) {
@@ -88,92 +89,19 @@ export const login = async (req, res, next) => {
   }
 };
 
-// export const currentUser = async (req, res, next) => {
-//   const { _id } = req.user;
-//   try {
-//     const user = await User.findOne({ _id: _id }).select('-password -secret -updatedAt -__v');
-//     if (!user) {
-//       return next(CustomErrorHandler.notFound());
-//     }
-
-//     res.json({
-//       messgae: 'User successfully found',
-//       data: user,
-//     });
-//   } catch (error) {
-//     return next(err);
-//   }
-// };
-
-// export const forgotPassword = async (req, res, next) => {
-//   const { email, newPassword, secret } = req.body;
-
-//   const forgotPasswordSchema = joi.object({
-//     email: joi.string().email().required(),
-//     newPassword: joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
-//     secret: joi.string().required(),
-//   });
-//   const { error } = forgotPasswordSchema.validate(req.body);
-//   if (error) {
-//     return next(error);
-//   }
-
-//   try {
-//     const user = await User.findOne({ email, secret });
-//     if (!user) {
-//       return next(CustomErrorHandler.wrongCredentials());
-//     }
-
-//     const hashedPassword = await hashPassword(newPassword);
-
-//     await User.findByIdAndUpdate(user._id, { password: hashedPassword });
-
-//     res.json({
-//       message: 'Password successfully changed',
-//     });
-//   } catch (error) {
-//     return next(error);
-//   }
-// };
-
-// export const profileUpdate = async (req, res, next) => {
-//   const { _id } = req.user;
-//   const { password } = req.body;
-
-//   const updateSchema = joi.object({
-//     name: joi.string().min(3).max(30).required(),
-//     username: joi.string().required(),
-//     about: joi.string().required(),
-//     secret: joi.string().required(),
-//     password: joi.string().min(6).pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
-//   });
-
-//   const { error } = updateSchema.validate(req.body);
-//   if (error) {
-//     return next(error);
-//   }
-
-//   const hashedPassword = await hashPassword(password);
-
-//   try {
-//     const user = await User.findByIdAndUpdate(
-//       _id,
-//       { ...req.body, password: hashedPassword },
-//       { new: true },
-//     );
-
-//     user.password = undefined;
-//     user.secret = undefined;
-
-//     res.json({
-//       message: 'User successfully updated',
-//       data: user,
-//     });
-//   } catch (error) {
-//     if (error.code === 11000) {
-//       return next(CustomErrorHandler.alreadyExist('Duplicate username'));
-//     } else {
-//       return next(error);
-//     }
-//   }
-// };
+export const verifyUser = async (req, res, next) => {
+  let authHeader = req.headers.authorization;
+  if (!authHeader) {
+    return next(CustomErrorHandler.unAuthorized());
+  }
+  const token = authHeader.split(' ')[1];
+  try {
+    JwtService.verify(token);
+    res.json({
+      message: 'User is verified',
+    });
+  } catch (error) {
+    console.log({ error });
+    return next(CustomErrorHandler.serverError());
+  }
+};

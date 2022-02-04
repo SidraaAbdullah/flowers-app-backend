@@ -5,3 +5,11 @@ export const getDeliveryQuery = (body) => {
   }
   return query;
 };
+
+export const patchUserQuery = (body) => {
+  let query = {};
+  if (body.primary) {
+    query.primary = body.primary;
+  }
+  return query;
+};
