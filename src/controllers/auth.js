@@ -104,11 +104,9 @@ export const verifyUser = async (req, res, next) => {
       .status(200);
   } catch (error) {
     console.log({ error });
-    return res
-      .json({
-        message: 'Token expired',
-      })
-      .status(400);
+    return res.status(400).json({
+      message: 'Token expired',
+    });
   }
 };
 export const changePassword = async (req, res, next) => {
