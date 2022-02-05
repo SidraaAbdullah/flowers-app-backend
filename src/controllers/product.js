@@ -1,8 +1,8 @@
 import product from '../models/product';
+import { getProductsQuery } from '../utils/products';
 
 export const createProduct = async (req, res) => {
   try {
-    console.log(req.user);
     const newProduct = await product.create({ ...req.body, created_by: req.user._id });
     return res.status(200).json({
       message: 'Flower successfully created',
@@ -19,10 +19,7 @@ export const createProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    let query = {};
-    if (req.query.category_id) {
-      query.category_id = req.query.category_id;
-    }
+    const query = getProductsQuery(req.query);
     const products = await product.find(query).populate('category_id');
     return res.json({
       message: 'Gathered all flowers!',

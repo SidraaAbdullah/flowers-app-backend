@@ -6,10 +6,24 @@ export const getDeliveryQuery = (body) => {
   return query;
 };
 
-export const patchUserQuery = (body) => {
+export const patchDeliveryQuery = (body) => {
   let query = {};
   if (body.primary) {
     query.primary = body.primary;
+  }
+  return query;
+};
+
+export const patchUserQuery = (body) => {
+  let query = {};
+  if (body.email) {
+    query.email = body.email;
+  }
+  if (body.name) {
+    query.name = body.name;
+  }
+  if (body.phone_number) {
+    query.phone_number = body.phone_number;
   }
   return query;
 };
