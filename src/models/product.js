@@ -18,7 +18,7 @@ const product = new Schema({
   created_by: {
     type: Schema.ObjectId,
     required: true,
-    ref: 'user',
+    ref: 'Admin',
   },
   category_id: {
     type: Schema.ObjectId,

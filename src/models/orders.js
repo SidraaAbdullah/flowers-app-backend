@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import { ORDER_STATUSES } from '../constants/index';
 const schema = mongoose.Schema;
 
 const products = new schema({
@@ -32,7 +33,12 @@ const order = new Schema({
   },
   status: {
     type: String,
-    default: 'inProgress',
+    default: ORDER_STATUSES['IN-PROGRESS'],
+    enum: Object.keys(ORDER_STATUSES),
+  },
+  paymentType: {
+    type: String,
+    default: 'COD',
   },
 });
 order.set('timestamps', true);
