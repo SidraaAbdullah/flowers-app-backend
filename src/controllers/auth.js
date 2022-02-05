@@ -97,11 +97,36 @@ export const verifyUser = async (req, res, next) => {
   const token = authHeader.split(' ')[1];
   try {
     JwtService.verify(token);
-    res.json({
-      message: 'User is verified',
-    });
+    res
+      .json({
+        message: 'User is verified',
+      })
+      .status(200);
   } catch (error) {
     console.log({ error });
-    return next(CustomErrorHandler.serverError());
+    return res
+      .json({
+        message: 'Token expired',
+      })
+      .status(400);
+  }
+};
+export const changePassword = async (req, res, next) => {
+  try {
+    const { newPassword, password } = req.body;
+    const user = await User.findById(req.user._id);
+    const match = await comparePassword(password, user.password);
+    if (!match) {
+      return next(CustomErrorHandler.wrongCredentials());
+    }
+    const hashedPassword = await hashPassword(newPassword);
+    await User.updateOne({ _id: user._id }, { password: hashedPassword });
+    return res
+      .json({
+        message: 'Password has been updated!',
+      })
+      .status(200);
+  } catch (error) {
+    return next(error);
   }
 };

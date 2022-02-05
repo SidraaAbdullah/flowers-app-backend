@@ -11,3 +11,7 @@ export const createProductValidate = {
 export const deleteProductValidate = {
   id: joi.string().required(),
 };
+export const getProductValidate = {
+  category_id: joi.string().optional(),
+  search: joi.string().optional(),
+};
