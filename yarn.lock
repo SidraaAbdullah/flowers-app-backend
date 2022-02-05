@@ -256,6 +256,11 @@
     "normalize-path" "^3.0.0"
     "picomatch" "^2.0.4"
 
+"app-root-path@^3.0.0":
+  "integrity" "sha512-qMcx+Gy2UZynHjOHOIXPNvpf+9cjvk3cWrBBK7zg4gH9+clobJRb9NGzcT7mQTcV/6Gm/1WelUtqxVXnNlrwcw=="
+  "resolved" "https://registry.npmjs.org/app-root-path/-/app-root-path-3.0.0.tgz"
+  "version" "3.0.0"
+
 "aproba@^1.0.3 || ^2.0.0":
   "integrity" "sha512-lYe4Gx7QT+MKGbDsA+Z+he/Wtef0BiwDOlK/XkBrdfsh9J/jPPXbX0tE9x9cl27Tmu5gg3QUbUrQYa/y+KOHPQ=="
   "resolved" "https://registry.npmjs.org/aproba/-/aproba-2.0.0.tgz"

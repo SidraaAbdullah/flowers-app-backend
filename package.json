@@ -25,6 +25,7 @@
     "nodemon": "^2.0.13"
   },
   "dependencies": {
+    "app-root-path": "^3.0.0",
     "bcrypt": "^5.0.1",
     "cloudinary": "^1.27.1",
     "cors": "^2.8.5",
