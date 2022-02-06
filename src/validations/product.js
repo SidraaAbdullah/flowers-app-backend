@@ -1,4 +1,5 @@
 import joi from 'joi';
+import { validatePagination } from './common';
 
 export const createProductValidate = {
   name: joi.string().required(),
@@ -15,4 +16,5 @@ export const deleteProductValidate = {
 export const getProductValidate = {
   category_id: joi.string().optional(),
   search: joi.string().optional(),
+  ...validatePagination,
 };

@@ -1,5 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import { ORDER_STATUSES } from '../constants/index';
+import mongoosePaginate from 'mongoose-paginate-v2';
+
 const schema = mongoose.Schema;
 
 const products = new schema({
@@ -42,4 +44,5 @@ const order = new Schema({
   },
 });
 order.set('timestamps', true);
+order.plugin(mongoosePaginate);
 export default mongoose.model('order', order, 'orders');

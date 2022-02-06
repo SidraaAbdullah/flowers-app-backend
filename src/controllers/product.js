@@ -1,4 +1,5 @@
 import product from '../models/product';
+import { paginateData } from '../utils';
 import { getProductsQuery } from '../utils/products';
 
 export const createProduct = async (req, res) => {
@@ -21,10 +22,11 @@ export const createProduct = async (req, res) => {
 export const getProducts = async (req, res) => {
   try {
     const query = getProductsQuery(req.query);
-    const products = await product.find(query).populate('category_id');
+    const { data, pagination } = await paginateData(product, query, req.query, 'category_id');
     return res.json({
       message: 'Gathered all flowers!',
-      data: products,
+      pagination,
+      data: data,
     });
   } catch (error) {
     return res.status(500).json({
