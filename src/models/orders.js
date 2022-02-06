@@ -4,7 +4,7 @@ import mongoosePaginate from 'mongoose-paginate-v2';
 
 const schema = mongoose.Schema;
 
-const products = new schema({
+export const OrderedProduct = new schema({
   product_id: {
     type: Schema.ObjectId,
     ref: 'Product',
@@ -16,10 +16,13 @@ const products = new schema({
   quantity: {
     type: String,
   },
+  rating: {
+    type: Number,
+  },
 });
 
 const order = new Schema({
-  products: [products],
+  products: [OrderedProduct],
   user_id: {
     type: Schema.ObjectId,
     required: true,
@@ -41,6 +44,9 @@ const order = new Schema({
   paymentType: {
     type: String,
     default: 'COD',
+  },
+  comment: {
+    type: String,
   },
 });
 order.set('timestamps', true);

@@ -1,5 +1,10 @@
 import express from 'express';
-import { changeOrderStatus, createOrders, getOrders } from '../controllers/orders';
+import {
+  changeOrderStatus,
+  createOrders,
+  getOrders,
+  rateOrderedProducts,
+} from '../controllers/orders';
 import { auth } from '../middlewares';
 import { canUpdateOrder } from '../middlewares/order';
 import { validate } from '../middlewares/schemaValidate';
@@ -7,6 +12,7 @@ import {
   createOrderValidate,
   getOrderValidate,
   validateChangeOrderStatus,
+  validateRateOrderedProducts,
 } from '../validations/orders';
 
 const router = express.Router();
@@ -18,6 +24,10 @@ router.put(
   [auth, validate(validateChangeOrderStatus), canUpdateOrder],
   changeOrderStatus,
 );
-// router.delete('/product', [auth, validate(deleteProductValidate)], deleteProducts);
+router.put(
+  '/order-rating/:id',
+  [auth, validate(validateRateOrderedProducts), canUpdateOrder],
+  rateOrderedProducts,
+);
 
 export default router;
