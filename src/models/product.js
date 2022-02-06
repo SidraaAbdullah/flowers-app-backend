@@ -15,6 +15,9 @@ const product = new Schema({
   description: {
     type: String,
   },
+  price: {
+    type: String,
+  },
   created_by: {
     type: Schema.ObjectId,
     required: true,
