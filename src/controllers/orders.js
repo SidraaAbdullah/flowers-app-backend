@@ -19,14 +19,12 @@ export const createOrders = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   try {
-    const { data, count } = await paginateData(orders, { user_id: req.user._id }, req.query, [
+    const { data, pagination } = await paginateData(orders, { user_id: req.user._id }, req.query, [
       { path: 'products.product_id', populate: ['category_id', 'created_by'] },
       { path: 'deliveryAddress' },
     ]);
     return res.status(200).json({
-      page_no: req.query.page_no,
-      records_per_page: req.query.records_per_page,
-      count,
+      pagination,
       data,
     });
   } catch (error) {
