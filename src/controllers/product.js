@@ -4,6 +4,7 @@ import { getProductsQuery } from '../utils/products';
 export const createProduct = async (req, res) => {
   try {
     const newProduct = await product.create({ ...req.body, created_by: req.user._id });
+    console.log(req);
     return res.status(200).json({
       message: 'Flower successfully created',
       data: newProduct,
