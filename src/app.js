@@ -13,7 +13,7 @@ import {
   orderRoutes,
   driverRoutes,
 } from './routes';
-
+import socketio from 'socket.io';
 const app = express();
 
 mongoose
@@ -23,6 +23,14 @@ mongoose
   })
   .then(() => console.log('DB Connected'))
   .catch((err) => console.log('DB Connection Error = ', err));
+const server = app.listen(APP_PORT, () => console.log(`Listening on port ${APP_PORT}.`));
+const io = socketio(server);
+
+// Make io accessible to our router
+app.use(function (req, res, next) {
+  req.io = io;
+  next();
+});
 
 //middlewares
 app.use(express.json({ limit: '5mb' }));
@@ -40,7 +48,3 @@ app.use('/api', orderRoutes);
 app.use('/api/driver', driverRoutes);
 
 app.use(errorHandler);
-const server = app.listen(APP_PORT, () => console.log(`Listening on port ${APP_PORT}.`));
-var io = require('socket.io')(server);
-// next line is the money
-app.set('socketio', io);
