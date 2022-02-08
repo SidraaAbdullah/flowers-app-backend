@@ -3,7 +3,16 @@ import { ORDER_STATUSES } from '../constants';
 import { validatePagination } from './common';
 
 export const createOrderValidate = {
-  products: joi.array().required(),
+  products: joi
+    .array()
+    .items(
+      joi.object({
+        product_id: joi.string().required(),
+        price: joi.number().optional(),
+        quantity: joi.number().optional(),
+      }),
+    )
+    .required(),
   deliveryAddress: joi.string().required(),
 };
 
@@ -16,4 +25,17 @@ export const validateChangeOrderStatus = {
     .string()
     .valid(...Object.keys(ORDER_STATUSES))
     .required(),
+};
+
+export const validateRateOrderedProducts = {
+  productsRating: joi
+    .array()
+    .items(
+      joi.object({
+        product_id: joi.string().required(),
+        rating: joi.number().required(),
+      }),
+    )
+    .required(),
+  comment: joi.string().optional(),
 };

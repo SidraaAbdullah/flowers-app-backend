@@ -28,6 +28,9 @@ const product = new Schema({
     type: Schema.ObjectId,
     ref: 'Category',
   },
+  rating: {
+    type: Number,
+  },
 });
 product.set('timestamps', true);
 product.plugin(mongoosePaginate);
