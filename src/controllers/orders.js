@@ -43,7 +43,7 @@ export const changeOrderStatus = async (req, res) => {
     const { status } = req.body;
     const updateQuery = { _id: order_id };
     await orders.updateOne(updateQuery, { status });
-    req.io.sockets.emit('statusUpdate', status);
+    req.io.sockets.emit(`${order_id}_statusUpdate`, status);
     // const io = req.app.get('socketio');
     // console.log(io);
     // io.emit('statusUpdate', status);
