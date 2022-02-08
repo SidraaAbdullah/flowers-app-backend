@@ -5,3 +5,8 @@ export const ORDER_STATUSES = {
   DELIVERED: 'DELIVERED',
   CANCELLED: 'CANCELLED',
 };
+
+export const USER_TYPES = {
+  DRIVER: 'DRIVER',
+  CONSUMER: 'CONSUMER',
+};

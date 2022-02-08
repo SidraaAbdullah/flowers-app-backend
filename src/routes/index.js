@@ -5,3 +5,4 @@ export { default as categoryRoutes } from './category';
 export { default as adminRoutes } from './admin-auth';
 export { default as userRoutes } from './user';
 export { default as orderRoutes } from './orders';
+export { default as driverRoutes } from './driver';

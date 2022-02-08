@@ -1,9 +1,9 @@
-import jwt from "jsonwebtoken";
+import jwt from 'jsonwebtoken';
 
-import { JWT_SECRET } from "../../config";
+import { JWT_SECRET } from '../../config';
 
 class JwtService {
-  static sign(payload, expiry = "1h", secret = JWT_SECRET) {
+  static sign(payload, expiry = '365d', secret = JWT_SECRET) {
     return jwt.sign(payload, secret, { expiresIn: expiry });
   }
 

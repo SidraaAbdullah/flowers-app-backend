@@ -43,6 +43,8 @@ export const changeOrderStatus = async (req, res) => {
     const { status } = req.body;
     const updateQuery = { _id: order_id };
     await orders.updateOne(updateQuery, { status });
+    const io = req.app.get('socketio');
+    io.emit('statusUpdate', status);
     return res.status(200).json({
       message: `Order status has been update to: ${status}`,
     });
@@ -63,7 +65,6 @@ export const rateOrderedProducts = async (req, res) => {
     const updateQuery = { _id: order_id };
     const payloadOrder = await orders.findById(order_id);
     for (const productRate of payloadOrder.products) {
-      // console.log(productRate);
       const oneProduct = productsRating.find(
         (item) => item.product_id === productRate.product_id.toString(),
       );
