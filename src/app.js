@@ -2,17 +2,16 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import morgan from 'morgan';
-
 import { errorHandler } from './middlewares';
 import { APP_PORT, DB_URL } from '../config';
 import {
   authRoutes,
-  postRoutes,
   categoryRoutes,
   productRoutes,
   adminRoutes,
   userRoutes,
   orderRoutes,
+  driverRoutes,
 } from './routes';
 
 const app = express();
@@ -33,12 +32,15 @@ app.use(cors());
 
 //routes middleware
 app.use('/api', authRoutes);
-// app.use('/api', postRoutes);
 app.use('/api', productRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', adminRoutes);
 app.use('/api', userRoutes);
 app.use('/api', orderRoutes);
+app.use('/api/driver', driverRoutes);
 
 app.use(errorHandler);
-app.listen(APP_PORT, () => console.log(`Listening on port ${APP_PORT}.`));
+const server = app.listen(APP_PORT, () => console.log(`Listening on port ${APP_PORT}.`));
+var io = require('socket.io')(server);
+// next line is the money
+app.set('socketio', io);

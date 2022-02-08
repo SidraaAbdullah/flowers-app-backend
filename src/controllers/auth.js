@@ -5,6 +5,7 @@ import { hashPassword, comparePassword } from '../utils';
 import { CustomErrorHandler, JwtService } from '../services';
 import { registerSchema, loginSchema } from '../validations/user-auth';
 import Delivery from '../models/delivery-address';
+import { USER_TYPES } from '../constants';
 
 export const register = async (req, res, next) => {
   const { name, phone_number, email, password } = req.body;
@@ -47,6 +48,7 @@ export const register = async (req, res, next) => {
       id: result._id,
       email,
       name,
+      type: USER_TYPES.CONSUMER,
     },
   });
 };
@@ -73,7 +75,10 @@ export const login = async (req, res, next) => {
     const access_token = JwtService.sign({
       _id,
     });
-    const primaryDeliveryAddress = await Delivery.findOne({ user_id: _id, primary: true });
+    const primaryDeliveryAddress = await Delivery.findOne({
+      user_id: _id,
+      primary: true,
+    });
     res.json({
       message: 'Login success',
       data: {
@@ -82,6 +87,7 @@ export const login = async (req, res, next) => {
         email,
         access_token,
         primaryDeliveryAddress,
+        type: USER_TYPES.CONSUMER,
       },
     });
   } catch (error) {
