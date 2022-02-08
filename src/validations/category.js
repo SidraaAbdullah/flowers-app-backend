@@ -10,3 +10,7 @@ export const createCategoryValidate = {
 export const deleteCategoryValidate = {
   id: joi.string().required(),
 };
+
+export const getCategoryValidate = {
+  search: joi.string().optional(),
+};

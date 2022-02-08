@@ -1,4 +1,5 @@
 import category from '../models/category';
+import { getCategoriesQuery } from '../utils/products';
 
 export const createCategory = async (req, res) => {
   try {
@@ -17,7 +18,8 @@ export const createCategory = async (req, res) => {
 
 export const getCategories = async (req, res) => {
   try {
-    const categories = await category.find(req.query);
+    const query = getCategoriesQuery(req.query);
+    const categories = await category.find(query);
     return res.json({
       message: 'Gathered all categories!',
       data: categories,

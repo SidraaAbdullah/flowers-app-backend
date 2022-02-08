@@ -15,3 +15,17 @@ export const getProductsQuery = (params) => {
   }
   return query;
 };
+
+export const getCategoriesQuery = (params) => {
+  let query = {};
+  if (params.search) {
+    query = {
+      ...query,
+      $or: [
+        { description: { $regex: params.search.trim(), $options: 'i' } },
+        { name: { $regex: params.search.trim(), $options: 'i' } },
+      ],
+    };
+  }
+  return query;
+};
