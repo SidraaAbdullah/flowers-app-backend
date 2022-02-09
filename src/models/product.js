@@ -31,6 +31,11 @@ const product = new Schema({
   rating: {
     type: Number,
   },
+  stock_id: {
+    type: Schema.ObjectId,
+    unique: true,
+    ref: 'Stock',
+  },
 });
 product.set('timestamps', true);
 product.plugin(mongoosePaginate);

@@ -1,9 +1,19 @@
+import { Stock } from '../models';
 import orders from '../models/orders';
 import product from '../models/product';
 import { paginateData } from '../utils';
 
 export const createOrders = async (req, res) => {
   try {
+    const { products } = req.body;
+
+    // UPDATING STOCK IN DB
+    for (const product of products) {
+      await Stock.updateOne(
+        { product_id: product.product_id },
+        { $inc: { quantity: `-${product.quantity}` } },
+      );
+    }
     const newProduct = await orders.create({ ...req.body, user_id: req.user._id });
     return res.status(200).json({
       message: 'Order successfully created',
@@ -20,6 +30,7 @@ export const createOrders = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   try {
+    // const { type } = req.query;
     const { data, pagination } = await paginateData(orders, { user_id: req.user._id }, req.query, [
       { path: 'products.product_id', populate: ['category_id', 'created_by'] },
       { path: 'deliveryAddress' },
@@ -44,9 +55,6 @@ export const changeOrderStatus = async (req, res) => {
     const updateQuery = { _id: order_id };
     await orders.updateOne(updateQuery, { status });
     req.io.sockets.emit(`${order_id}_statusUpdate`, status);
-    // const io = req.app.get('socketio');
-    // console.log(io);
-    // io.emit('statusUpdate', status);
     return res.status(200).json({
       message: `Order status has been update to: ${status}`,
     });

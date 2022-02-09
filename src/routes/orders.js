@@ -6,7 +6,7 @@ import {
   rateOrderedProducts,
 } from '../controllers/orders';
 import { auth } from '../middlewares';
-import { canUpdateOrder } from '../middlewares/order';
+import { canUpdateOrder, CHECK_IS_PRODUCT_QUANTITY } from '../middlewares/order';
 import { validate } from '../middlewares/schemaValidate';
 import {
   createOrderValidate,
@@ -17,7 +17,11 @@ import {
 
 const router = express.Router();
 
-router.post('/order', [auth, validate(createOrderValidate)], createOrders);
+router.post(
+  '/order',
+  [auth, validate(createOrderValidate), CHECK_IS_PRODUCT_QUANTITY],
+  createOrders,
+);
 router.get('/order', [auth, validate(getOrderValidate)], getOrders);
 router.put(
   '/order-status/:id',

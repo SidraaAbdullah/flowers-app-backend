@@ -1,5 +1,5 @@
 import joi from 'joi';
-import { ORDER_STATUSES } from '../constants';
+import { ORDER_STATUSES, USER_TYPES } from '../constants';
 import { validatePagination } from './common';
 
 export const createOrderValidate = {
@@ -8,8 +8,8 @@ export const createOrderValidate = {
     .items(
       joi.object({
         product_id: joi.string().required(),
-        price: joi.number().optional(),
-        quantity: joi.number().optional(),
+        price: joi.number().required(),
+        quantity: joi.number().required(),
       }),
     )
     .required(),
@@ -25,6 +25,10 @@ export const validateChangeOrderStatus = {
     .string()
     .valid(...Object.keys(ORDER_STATUSES))
     .required(),
+  type: joi
+    .string()
+    .valid(...Object.keys(USER_TYPES))
+    .optional(),
 };
 
 export const validateRateOrderedProducts = {
