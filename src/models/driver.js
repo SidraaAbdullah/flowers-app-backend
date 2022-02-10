@@ -23,6 +23,10 @@ const driverSchema = new Schema({
     min: 6,
     max: 64,
   },
+  availableForDelivery: {
+    type: Boolean,
+    default: true,
+  },
 });
 
 export default mongoose.model('Driver', driverSchema, 'drivers');

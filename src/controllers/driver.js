@@ -4,6 +4,7 @@ import { CustomErrorHandler, JwtService } from '../services';
 import { registerSchema, loginSchema } from '../validations/user-auth';
 import Delivery from '../models/delivery-address';
 import { USER_TYPES } from '../constants';
+import { getDriversQuery } from '../utils/driver';
 
 export const register = async (req, res, next) => {
   try {
@@ -73,6 +74,32 @@ export const login = async (req, res, next) => {
         primaryDeliveryAddress,
         type: USER_TYPES.DRIVER,
       },
+    });
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const patchUpdateDriver = async (req, res, next) => {
+  try {
+    console.log(req.body);
+    await Driver.updateOne({ _id: req.user._id }, req.body);
+    return res.json({
+      message: 'Driver updated',
+    });
+  } catch (error) {
+    console.log(error);
+    return next(error);
+  }
+};
+
+export const getDrivers = async (req, res, next) => {
+  try {
+    const query = getDriversQuery(req.query, req.user);
+    const driver = await Driver.find(query);
+    return res.json({
+      message: 'Driver updated',
+      data: driver,
     });
   } catch (error) {
     return next(error);
