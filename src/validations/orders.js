@@ -18,6 +18,7 @@ export const createOrderValidate = {
 
 export const getOrderValidate = {
   status: joi.string().optional(),
+  order_id: joi.string().optional(),
   ...validatePagination,
 };
 export const validateChangeOrderStatus = {

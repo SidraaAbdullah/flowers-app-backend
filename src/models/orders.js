@@ -48,6 +48,11 @@ const order = new Schema({
   comment: {
     type: String,
   },
+  uid: {
+    type: String,
+    required: true,
+    unique: true,
+  },
 });
 order.set('timestamps', true);
 order.plugin(mongoosePaginate);
