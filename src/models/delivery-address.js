@@ -13,7 +13,7 @@ const deliveryAddress = new Schema({
   primary: {
     type: Boolean,
   },
-  locationPoints: {
+  locationDetails: {
     latitude: String,
     longitude: String,
     accuracy: String,

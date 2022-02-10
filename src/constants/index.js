@@ -9,4 +9,5 @@ export const ORDER_STATUSES = {
 export const USER_TYPES = {
   DRIVER: 'DRIVER',
   CONSUMER: 'CONSUMER',
+  ADMIN: 'ADMIN',
 };

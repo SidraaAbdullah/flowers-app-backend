@@ -1,3 +1,4 @@
+import { USER_TYPES } from '../constants';
 import { Stock } from '../models';
 import orders from '../models/orders';
 import product from '../models/product';
@@ -30,11 +31,16 @@ export const createOrders = async (req, res) => {
 
 export const getOrders = async (req, res) => {
   try {
-    // const { type } = req.query;
-    const { data, pagination } = await paginateData(orders, { user_id: req.user._id }, req.query, [
-      { path: 'products.product_id', populate: ['category_id', 'created_by'] },
-      { path: 'deliveryAddress' },
-    ]);
+    const { type } = req.query;
+    const { data, pagination } = await paginateData(
+      orders,
+      type === USER_TYPES.ADMIN ? {} : { user_id: req.user._id },
+      req.query,
+      [
+        { path: 'products.product_id', populate: ['category_id', 'created_by'] },
+        { path: 'deliveryAddress' },
+      ],
+    );
     return res.status(200).json({
       pagination,
       data,
