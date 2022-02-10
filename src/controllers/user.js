@@ -5,8 +5,17 @@ import { getDeliveryQuery, patchDeliveryQuery, patchUserQuery } from '../utils/u
 export const createDeliveryAddress = async (req, res) => {
   try {
     let primary = true;
+    const addressAlready = await Delivery.findOne({
+      address: req.body.address,
+      user_id: req.user._id,
+    });
+    if (addressAlready) {
+      return res.status(400).json({
+        message: 'This address already belongs to this user',
+      });
+    }
     const isAlreadyAddress = await Delivery.findOne({ user_id: req.user._id });
-    if (isAlreadyAddress) primary = false;
+    if (isAlreadyAddress.length) primary = false;
     const newDeliveryAddress = await Delivery.create({
       ...req.body,
       user_id: req.user._id,
