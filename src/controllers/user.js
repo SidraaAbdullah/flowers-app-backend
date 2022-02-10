@@ -15,7 +15,7 @@ export const createDeliveryAddress = async (req, res) => {
       });
     }
     const isAlreadyAddress = await Delivery.findOne({ user_id: req.user._id });
-    if (isAlreadyAddress.length) primary = false;
+    if (isAlreadyAddress) primary = false;
     const newDeliveryAddress = await Delivery.create({
       ...req.body,
       user_id: req.user._id,
