@@ -16,8 +16,11 @@ export const getOrdersQuery = (params, user) => {
     }
     if (params.type === USER_TYPES.DRIVER) {
       query = {
-        $or: [{ status: ORDER_STATUSES['IN-PROGRESS'] }, { driver_id: params.driver_id }],
+        $or: [{ status: ORDER_STATUSES['IN-PROGRESS'] }, { driver_id: user._id }],
       };
+      if (params.order_id) {
+        query = { ...query, _id: params.order_id };
+      }
     }
   }
   return query;

@@ -6,7 +6,11 @@ import {
   rateOrderedProducts,
 } from '../controllers/orders';
 import { auth } from '../middlewares';
-import { canUpdateOrder, CHECK_IS_PRODUCT_QUANTITY } from '../middlewares/order';
+import {
+  canUpdateOrder,
+  canUpdateOrderWithDriver,
+  CHECK_IS_PRODUCT_QUANTITY,
+} from '../middlewares/order';
 import { validate } from '../middlewares/schemaValidate';
 import {
   createOrderValidate,
@@ -25,7 +29,7 @@ router.post(
 router.get('/order', [auth, validate(getOrderValidate)], getOrders);
 router.put(
   '/order-status/:id',
-  [auth, validate(validateChangeOrderStatus), canUpdateOrder],
+  [auth, validate(validateChangeOrderStatus), canUpdateOrderWithDriver],
   changeOrderStatus,
 );
 router.put(

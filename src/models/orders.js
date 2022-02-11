@@ -53,6 +53,10 @@ const order = new Schema({
     required: true,
     unique: true,
   },
+  driver_id: {
+    type: Schema.ObjectId,
+    ref: 'Driver',
+  },
 });
 order.set('timestamps', true);
 order.plugin(mongoosePaginate);

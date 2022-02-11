@@ -1,3 +1,4 @@
+import { USER_TYPES } from '../constants';
 import { Stock } from '../models';
 import orders from '../models/orders';
 import product from '../models/product';
@@ -12,6 +13,29 @@ export const canUpdateOrder = async (req, res, next) => {
       return next(CustomErrorHandler.unAuthorized('No order found'));
     }
     if (_id !== (order.user_id && order.user_id.toString())) {
+      return next(
+        CustomErrorHandler.unAuthorized("You don't have access to update / delete this order"),
+      );
+    } else {
+      next();
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
+
+export const canUpdateOrderWithDriver = async (req, res, next) => {
+  try {
+    const { _id } = req.user;
+    const { id } = req.params;
+    const order = await orders.findById(id);
+    if (!order) {
+      return next(CustomErrorHandler.unAuthorized('No order found'));
+    }
+    if (
+      _id !== (order.user_id && order.user_id.toString()) &&
+      !(req.body.type === USER_TYPES.DRIVER)
+    ) {
       return next(
         CustomErrorHandler.unAuthorized("You don't have access to update / delete this order"),
       );
