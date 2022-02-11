@@ -25,5 +25,8 @@ export const patchUserQuery = (body) => {
   if (body.phone_number) {
     query.phone_number = body.phone_number;
   }
+  if (body.expo_notification_token) {
+    query.expo_notification_token = body.expo_notification_token;
+  }
   return query;
 };

@@ -17,8 +17,12 @@ export const createOrders = async (req, res) => {
         { $inc: { quantity: `-${product.quantity}` } },
       );
     }
+
+    // ORDER ID
     const uid = new ShortUniqueId({ length: 10 });
     const newProduct = await orders.create({ ...req.body, user_id: req.user._id, uid: uid() });
+
+    // RESPONSE
     res.status(200).json({
       message: 'Order successfully created',
       data: newProduct,
@@ -46,6 +50,7 @@ export const getOrders = async (req, res) => {
     const { data, pagination } = await paginateData(orders, query, req.query, [
       { path: 'products.product_id', populate: ['category_id', 'created_by'] },
       { path: 'deliveryAddress' },
+      { path: 'user_id' },
     ]);
     return res.status(200).json({
       pagination,

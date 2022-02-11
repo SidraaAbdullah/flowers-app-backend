@@ -33,6 +33,7 @@ export const validatePatchUser = {
   email: joi.string().optional(),
   name: joi.string().optional(),
   phone_number: joi.string().optional(),
+  expo_notification_token: joi.string().optional(),
 };
 export const validateChangePassword = {
   newPassword: joi.string().required(),

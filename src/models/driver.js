@@ -27,6 +27,9 @@ const driverSchema = new Schema({
     type: Boolean,
     default: true,
   },
+  expo_notification_token: {
+    type: String,
+  },
 });
 
 export default mongoose.model('Driver', driverSchema, 'drivers');

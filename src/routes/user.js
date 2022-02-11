@@ -26,7 +26,7 @@ router.patch(
   deliveryUpdatePatch,
 );
 router.get('/user/delivery-address', [auth], getDeliveryAddress);
-router.patch('/user', [validate(validatePatchUser), auth], updateUserProfile);
+router.patch('/user', [auth, validate(validatePatchUser)], updateUserProfile);
 // router.delete('/product', [auth, validate(deleteProductValidate)], deleteProducts);
 
 export default router;

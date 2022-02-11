@@ -5,6 +5,7 @@ import { registerSchema, loginSchema } from '../validations/user-auth';
 import Delivery from '../models/delivery-address';
 import { USER_TYPES } from '../constants';
 import { getDriversQuery } from '../utils/driver';
+import { sendNotification } from '../utils/notifications';
 
 export const register = async (req, res, next) => {
   try {
@@ -44,6 +45,7 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+    console.log(req.body);
     const { error } = loginSchema.validate(req.body);
     if (error) {
       return next(error);
@@ -56,7 +58,7 @@ export const login = async (req, res, next) => {
     if (!match) {
       return next(CustomErrorHandler.wrongCredentials());
     }
-    const { _id, name } = user;
+    const { _id } = user;
     const access_token = JwtService.sign({
       _id,
     });
@@ -67,23 +69,25 @@ export const login = async (req, res, next) => {
     res.json({
       message: 'Login success',
       data: {
-        _id,
-        name,
-        email,
         access_token,
         primaryDeliveryAddress,
         type: USER_TYPES.DRIVER,
+        ...user._doc,
       },
     });
   } catch (error) {
+    console.log(error.toString());
     return next(error);
   }
 };
 
 export const patchUpdateDriver = async (req, res, next) => {
   try {
-    console.log(req.body);
     await Driver.updateOne({ _id: req.user._id }, req.body);
+    const data = await Driver.findById(req.user._id);
+    await sendNotification('You are updated now!', { path: 'home' }, [
+      data.expo_notification_token,
+    ]);
     return res.json({
       message: 'Driver updated',
     });
@@ -102,6 +106,7 @@ export const getDrivers = async (req, res, next) => {
       data: driver,
     });
   } catch (error) {
+    console.log(error);
     return next(error);
   }
 };

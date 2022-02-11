@@ -26,7 +26,7 @@ const order = new Schema({
   user_id: {
     type: Schema.ObjectId,
     required: true,
-    ref: 'user',
+    ref: 'User',
   },
   deliveryAddress: {
     type: Schema.ObjectId,
@@ -56,6 +56,12 @@ const order = new Schema({
   driver_id: {
     type: Schema.ObjectId,
     ref: 'Driver',
+  },
+  delivery_charges: {
+    type: String,
+  },
+  special_note: {
+    type: String,
   },
 });
 order.set('timestamps', true);

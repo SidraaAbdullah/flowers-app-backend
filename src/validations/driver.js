@@ -5,4 +5,5 @@ export const patchUpdateDriverValidate = {
   name: Joi.string().optional(),
   phone_number: Joi.string().optional(),
   availableForDelivery: Joi.boolean().optional(),
+  expo_notification_token: Joi.string().optional(),
 };

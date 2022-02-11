@@ -14,6 +14,8 @@ export const createOrderValidate = {
     )
     .required(),
   deliveryAddress: joi.string().required(),
+  delivery_charges: joi.string().required(),
+  special_note: joi.string().required(),
 };
 
 export const getOrderValidate = {

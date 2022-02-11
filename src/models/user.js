@@ -23,6 +23,9 @@ const userSchema = new Schema({
     min: 6,
     max: 64,
   },
+  expo_notification_token: {
+    type: String,
+  },
 });
 
 export default mongoose.model('User', userSchema, 'users');
