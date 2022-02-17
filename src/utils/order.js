@@ -10,9 +10,7 @@ export const getOrdersQuery = (params, user) => {
   }
   if (params.type) {
     if (params.type === USER_TYPES.ADMIN) {
-      query = {
-        user_id: undefined,
-      };
+      query = {};
     }
     if (params.type === USER_TYPES.DRIVER) {
       query = {

@@ -45,7 +45,6 @@ export const register = async (req, res, next) => {
 export const login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body);
     const { error } = loginSchema.validate(req.body);
     if (error) {
       return next(error);
