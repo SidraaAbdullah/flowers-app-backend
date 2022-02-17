@@ -31,7 +31,9 @@ export const canRateOrder = async (req, res, next) => {
     if (order.status === ORDER_STATUSES.DELIVERED) {
       next();
     } else {
-      return CustomErrorHandler.notPossible("You cannot rate this order until it's delivered");
+      return next(
+        CustomErrorHandler.notPossible("You cannot rate this order until it's delivered"),
+      );
     }
   } catch (error) {
     return next(error);

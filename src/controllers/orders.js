@@ -136,7 +136,12 @@ export const rateOrderedProducts = async (req, res) => {
       const driverLoad = await Driver.findById(payloadOrder.driver_id);
       await Driver.updateOne(
         { _id: payloadOrder.driver_id },
-        { rating: ((driver_rating || 0) + (driverLoad.rating || 0)) / 2 },
+        {
+          rating:
+            typeof driverLoad.rating === 'undefined'
+              ? driver_rating
+              : ((+driver_rating || 0) + (+driverLoad.rating || 0)) / 2,
+        },
       );
     }
     return res.status(200).json({
