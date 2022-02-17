@@ -52,7 +52,7 @@ export const canUpdateOrderWithDriver = async (req, res, next) => {
       _id === (order.user_id && order.user_id.toString()) ||
       (order.status === ORDER_STATUSES['IN-PROGRESS']
         ? req.body.type === USER_TYPES.DRIVER
-        : order.driver_id === _id)
+        : order.driver_id.toString() === _id)
     ) {
       next();
     } else {
