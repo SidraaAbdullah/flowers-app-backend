@@ -8,7 +8,9 @@
     "start": "node -r esm src/app.js",
     "lint": "eslint --ext js,jsx src"
   },
-  "keywords": [],
+  "keywords": [
+    "heroku"
+  ],
   "author": "",
   "license": "ISC",
   "devDependencies": {
