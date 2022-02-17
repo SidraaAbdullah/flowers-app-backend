@@ -63,6 +63,9 @@ const order = new Schema({
   special_note: {
     type: String,
   },
+  driver_rating: {
+    type: String,
+  },
 });
 order.set('timestamps', true);
 order.plugin(mongoosePaginate);

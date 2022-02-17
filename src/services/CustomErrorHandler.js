@@ -21,6 +21,10 @@ class CustomErrorHandler extends Error {
     return new CustomErrorHandler(404, message);
   }
 
+  static notPossible(message = 'This operation is not possible') {
+    return new CustomErrorHandler(400, message);
+  }
+
   static serverError(message = 'Internal server error') {
     return new CustomErrorHandler(500, message);
   }

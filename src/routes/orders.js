@@ -7,6 +7,7 @@ import {
 } from '../controllers/orders';
 import { auth } from '../middlewares';
 import {
+  canRateOrder,
   canUpdateOrder,
   canUpdateOrderWithDriver,
   CHECK_IS_PRODUCT_QUANTITY,
@@ -34,7 +35,7 @@ router.put(
 );
 router.put(
   '/order-rating/:id',
-  [auth, validate(validateRateOrderedProducts), canUpdateOrder],
+  [auth, validate(validateRateOrderedProducts), canUpdateOrder, canRateOrder],
   rateOrderedProducts,
 );
 

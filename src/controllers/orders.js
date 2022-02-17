@@ -1,6 +1,6 @@
 import ShortUniqueId from 'short-unique-id';
 import { ORDER_STATUSES, USER_TYPES } from '../constants';
-import { Stock } from '../models';
+import { Driver, Stock } from '../models';
 import orders from '../models/orders';
 import product from '../models/product';
 import { paginateData } from '../utils';
@@ -108,7 +108,7 @@ export const changeOrderStatus = async (req, res) => {
 export const rateOrderedProducts = async (req, res) => {
   try {
     const order_id = req.params.id;
-    const { productsRating, comment } = req.body;
+    const { productsRating, comment, driver_rating } = req.body;
     let products = [];
     const updateQuery = { _id: order_id };
     const payloadOrder = await orders.findById(order_id);
@@ -131,7 +131,14 @@ export const rateOrderedProducts = async (req, res) => {
         await product.updateOne({ _id: productRate.product_id }, { rating });
       }
     }
-    await orders.updateOne(updateQuery, { comment, products });
+    await orders.updateOne(updateQuery, { comment, products, driver_rating });
+    if (driver_rating) {
+      const driverLoad = await Driver.findById(payloadOrder.driver_id);
+      await Driver.updateOne(
+        { _id: payloadOrder.driver_id },
+        { rating: ((driver_rating || 0) + (driverLoad.rating || 0)) / 2 },
+      );
+    }
     return res.status(200).json({
       message: `Order rating has been added!`,
     });

@@ -1,4 +1,5 @@
 import mongoose, { Schema } from 'mongoose';
+import { DRIVER_STATUS } from '../constants';
 
 const driverSchema = new Schema({
   name: {
@@ -28,6 +29,13 @@ const driverSchema = new Schema({
     default: true,
   },
   expo_notification_token: {
+    type: String,
+  },
+  status: {
+    type: String,
+    default: DRIVER_STATUS.PENDING,
+  },
+  rating: {
     type: String,
   },
 });

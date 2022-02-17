@@ -11,3 +11,8 @@ export const USER_TYPES = {
   CONSUMER: 'CONSUMER',
   ADMIN: 'ADMIN',
 };
+
+export const DRIVER_STATUS = {
+  PENDING: 'PENDING',
+  ACTIVE: 'ACTIVE',
+};

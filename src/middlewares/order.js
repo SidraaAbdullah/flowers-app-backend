@@ -1,4 +1,4 @@
-import { USER_TYPES } from '../constants';
+import { ORDER_STATUSES, USER_TYPES } from '../constants';
 import { Stock } from '../models';
 import orders from '../models/orders';
 import product from '../models/product';
@@ -24,6 +24,20 @@ export const canUpdateOrder = async (req, res, next) => {
   }
 };
 
+export const canRateOrder = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const order = await orders.findById(id);
+    if (order.status === ORDER_STATUSES.DELIVERED) {
+      next();
+    } else {
+      return CustomErrorHandler.notPossible("You cannot rate this order until it's delivered");
+    }
+  } catch (error) {
+    return next(error);
+  }
+};
+
 export const canUpdateOrderWithDriver = async (req, res, next) => {
   try {
     const { _id } = req.user;
@@ -33,14 +47,14 @@ export const canUpdateOrderWithDriver = async (req, res, next) => {
       return next(CustomErrorHandler.unAuthorized('No order found'));
     }
     if (
-      _id !== (order.user_id && order.user_id.toString()) &&
-      !(req.body.type === USER_TYPES.DRIVER)
+      _id === (order.user_id && order.user_id.toString()) ||
+      (order.status === ORDER_STATUSES['IN-PROGRESS']
+        ? req.body.type === USER_TYPES.DRIVER
+        : order.driver_id === _id)
     ) {
-      return next(
-        CustomErrorHandler.unAuthorized("You don't have access to update / delete this order"),
-      );
-    } else {
       next();
+    } else {
+      return next(CustomErrorHandler.unAuthorized("You don't have access to update this order"));
     }
   } catch (error) {
     return next(error);

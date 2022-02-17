@@ -45,4 +45,5 @@ export const validateRateOrderedProducts = {
     )
     .required(),
   comment: joi.string().optional(),
+  driver_rating: joi.number().optional(),
 };
