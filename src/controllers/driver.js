@@ -3,7 +3,7 @@ import { hashPassword, comparePassword } from '../utils';
 import { CustomErrorHandler, JwtService } from '../services';
 import { registerSchema, loginSchema } from '../validations/user-auth';
 import Delivery from '../models/delivery-address';
-import { USER_TYPES } from '../constants';
+import { DRIVER_STATUS, USER_TYPES } from '../constants';
 import { getDriversQuery } from '../utils/driver';
 import { sendNotification } from '../utils/notifications';
 
@@ -103,6 +103,28 @@ export const getDrivers = async (req, res, next) => {
     return res.json({
       message: 'Driver updated',
       data: driver,
+    });
+  } catch (error) {
+    console.log(error);
+    return next(error);
+  }
+};
+
+export const approveDriver = async (req, res, next) => {
+  try {
+    const driver = await Driver.findById(req.body.driver_id);
+    if (driver && driver.status === DRIVER_STATUS.PENDING) {
+      await Driver.updateOne({ _id: req.body.driver_id }, { status: DRIVER_STATUS.ACTIVE });
+      await sendNotification('You are approved now!', { path: 'home' }, [
+        driver.expo_notification_token,
+      ]);
+    } else {
+      return res.status(400).json({
+        message: 'No such driver available to approve Or driver is already approved',
+      });
+    }
+    return res.status(200).json({
+      message: 'Driver is now approved',
     });
   } catch (error) {
     console.log(error);

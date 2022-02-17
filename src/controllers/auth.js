@@ -1,6 +1,6 @@
 // import joi from 'joi';
 // import { nanoid } from "nanoid";
-import { User } from '../models';
+import { Driver, User } from '../models';
 import { hashPassword, comparePassword } from '../utils';
 import { CustomErrorHandler, JwtService } from '../services';
 import { registerSchema, loginSchema } from '../validations/user-auth';
@@ -102,10 +102,15 @@ export const verifyUser = async (req, res, next) => {
   }
   const token = authHeader.split(' ')[1];
   try {
-    JwtService.verify(token);
+    const { _id } = JwtService.verify(token);
+    let user = {};
+    if (req.body.type === USER_TYPES.DRIVER) {
+      user = await Driver.findById(_id);
+    }
     res
       .json({
         message: 'User is verified',
+        data: user,
       })
       .status(200);
   } catch (error) {

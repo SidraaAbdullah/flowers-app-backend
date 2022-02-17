@@ -1,3 +1,4 @@
+import { Admin } from '../models';
 import { CustomErrorHandler, JwtService } from '../services';
 
 export const auth = (req, res, next) => {
@@ -17,5 +18,19 @@ export const auth = (req, res, next) => {
   } catch (error) {
     console.log({ error });
     return next(CustomErrorHandler.unAuthorized());
+  }
+};
+
+export const IS_ADMIN = async (req, res, next) => {
+  try {
+    const isAdmin = await Admin.findById(req.user._id);
+    if (!isAdmin) {
+      return res.status(400).json({
+        message: 'Only Admin has permission to access this API',
+      });
+    }
+    next();
+  } catch (error) {
+    return next(error);
   }
 };
