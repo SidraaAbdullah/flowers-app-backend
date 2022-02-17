@@ -23,7 +23,9 @@ mongoose
   })
   .then(() => console.log('DB Connected'))
   .catch((err) => console.log('DB Connection Error = ', err));
-const server = app.listen(APP_PORT, () => console.log(`Listening on port ${APP_PORT}.`));
+const server = app.listen(process.env.PORT || 8000, () =>
+  console.log(`Listening on port ${process.env.PORT || 8000}.`),
+);
 const io = socketio(server);
 
 // Make io accessible to our router
