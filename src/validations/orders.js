@@ -15,7 +15,7 @@ export const createOrderValidate = {
     .required(),
   deliveryAddress: joi.string().required(),
   delivery_charges: joi.string().required(),
-  special_note: joi.string().optional(),
+  special_note: joi.string().optional().allow(''),
 };
 
 export const getOrderValidate = {
@@ -44,6 +44,6 @@ export const validateRateOrderedProducts = {
       }),
     )
     .required(),
-  comment: joi.string().optional(),
+  comment: joi.string().optional().allow(''),
   driver_rating: joi.number().optional(),
 };

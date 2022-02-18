@@ -32,6 +32,7 @@ export const createOrders = async (req, res) => {
       .populate([
         { path: 'products.product_id', populate: ['category_id', 'created_by'] },
         { path: 'deliveryAddress' },
+        { path: 'driver_id' },
       ]);
     console.log('order kr rha hun wait!');
     req.io.of('/driver').emit('new_order', orderSocket);
