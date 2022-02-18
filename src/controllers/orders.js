@@ -52,6 +52,7 @@ export const getOrders = async (req, res) => {
       { path: 'products.product_id', populate: ['category_id', 'created_by'] },
       { path: 'deliveryAddress' },
       { path: 'user_id' },
+      { path: 'driver_id' },
     ]);
     return res.status(200).json({
       pagination,
