@@ -1,5 +1,4 @@
 import { Expo } from 'expo-server-sdk';
-import logger from '../logger';
 
 // HAVE TO ADD ACCESS TOKEN IN NEAR FUTURE
 let expo = new Expo();
@@ -10,7 +9,7 @@ export const createMessages = (body, data, pushTokens) => {
     // Each push token looks like ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]
     // Check that all your push tokens appear to be valid Expo push tokens
     if (!Expo.isExpoPushToken(pushToken)) {
-      logger.error(`Push token ${pushToken} is not a valid Expo push token`);
+      console.log(`Push token ${pushToken} is not a valid Expo push token`);
       continue;
     }
     // Construct a message (see https://docs.expo.io/versions/latest/guides/push-notifications.html)

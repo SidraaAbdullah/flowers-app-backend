@@ -115,9 +115,11 @@ export const approveDriver = async (req, res, next) => {
     const driver = await Driver.findById(req.body.driver_id);
     if (driver && driver.status === DRIVER_STATUS.PENDING) {
       await Driver.updateOne({ _id: req.body.driver_id }, { status: DRIVER_STATUS.ACTIVE });
-      await sendNotification('You are approved now!', { path: 'home' }, [
-        driver.expo_notification_token,
-      ]);
+      if (driver.expo_notification_token) {
+        await sendNotification('You are approved now!', { path: 'home' }, [
+          driver.expo_notification_token,
+        ]);
+      }
     } else {
       return res.status(400).json({
         message: 'No such driver available to approve Or driver is already approved',
